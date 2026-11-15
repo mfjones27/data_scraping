@@ -6,7 +6,7 @@ os.makedirs('mls_logos', exist_ok=True)
 
 url = 'https://www.mlssoccer.com/clubs/'
 
-response = rq.get(url)
+response = rq.get(url, timeout=30)
 
 if response.status_code == 200:
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -16,7 +16,7 @@ if response.status_code == 200:
     for img_tag in img_tags:
         club_name = img_tag.get('alt').replace(' ', '_')
         src = img_tag.get('src')
-        club_logo = rq.get(src).content
+        club_logo = rq.get(src, timeout=30).content
 
         with open(f'mls_logos/{club_name}.png', 'wb') as logo:
             logo.write(club_logo)

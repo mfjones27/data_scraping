@@ -1,0 +1,6 @@
+requests>=2.33.0
+pandas>=2.2
+lxml>=5.0
+beautifulsoup4>=4.12
+selenium>=4.20
+playwright>=1.48
