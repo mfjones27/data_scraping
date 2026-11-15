@@ -12,7 +12,7 @@ seasons = []
 
 for year in years:
     print(year)
-    data = rq.get(standings_url)
+    data = rq.get(standings_url, timeout=30)
     soup = BeautifulSoup(data.text, 'html.parser')
     eastern_table = soup.select(f'#results{year}221Eastern-Conference_overall')[0]
     western_table = soup.select(f'#results{year}221Western-Conference_overall')[0]
@@ -23,7 +23,7 @@ for year in years:
     time.sleep(2)
 
     for url in team_urls:
-        html = rq.get(f'https://fbref.com{url}')
+        html = rq.get(f'https://fbref.com{url}', timeout=30)
         matches = pd.read_html(StringIO(html.text), match='Scores & Fixtures')[0]
 
         team = url.split('/')[-1].replace('-Stats', '').replace('-', ' ')
@@ -33,7 +33,7 @@ for year in years:
         shooting_l = [l.get('href') for l in data.find_all('a') if l.get('href') and 'all_comps/shooting/' in l.get('href')][0]
         shooting_link = f'https://fbref.com{shooting_l}'
         time.sleep(7)
-        shooting_html = rq.get(shooting_link)
+        shooting_html = rq.get(shooting_link, timeout=30)
         shooting = pd.read_html(StringIO(shooting_html.text), match='Shooting')[0].iloc[:-1]
         shooting.columns = shooting.columns.droplevel()
         matches = matches.drop(columns=['Referee', 'Match Report', 'Notes'], axis=1)
